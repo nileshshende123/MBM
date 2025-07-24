@@ -1,0 +1,82 @@
+<template>
+  
+    
+  <div class="machine-dashboard">
+        <template for:each={machineRecords} for:item="machine">
+            <div key={machine.Id} class="machine-card" data-machine-id={machine.Id} 
+                 ondragover={allowDrop} ondrop={handleDrop} ondragleave={handleMachineDragLeave}>
+                
+                <div class="machine-content">
+                    <div class="machine-item">
+                        <h2>{machine.Machine_Nickname__c}</h2>
+                        <!-- Maintenance Warning -->
+                        <template if:true={machine.The_machine_is_under_maintenance__c}>
+                            <p class="maintenance-warning">This machine is under maintenance</p>
+                        </template>
+                        <p><b>Capacity:</b> {machine.Capacity_oz__c} oz</p>
+                        <p><b>Available:</b> {machine.Next_Available_Date__c}</p>
+                        <p><b>Remaining:</b> {machine.Remaining_Capacity__c} oz</p>
+                    </div>
+                    
+                    <div class="job-list">
+                        <!-- In Progress Jobs -->
+                        <div class="job-section">
+                            <h3>In Progress</h3>
+                            <template for:each={machine.inProgressJobs} for:item="job">
+                                <div key={job.Id} class="job-item in-progress-job" draggable="true" 
+                                     data-job-id={job.Id} ondragstart={handleDragStart} ondragend={handleDragEnd}
+                                     ondragover={handleJobDragOver} ondragleave={handleJobDragLeave}>
+                                    <template if:true={job.Order__r}>
+                                        <p><b>Order:</b> {job.Order__r.OrderNumber}</p>
+                                        <p><b>Customer:</b> {job.Order__r.Order_Nickname__c}</p>
+                                        <p><b>Order Date:</b> {job.Order__r.EffectiveDate}</p>
+                                        <p><b>Cut-Off Date:</b> {job.Order__r.Cut_Off_Date__c}</p>
+                                    </template>
+                                    <template if:false={job.Order__r}>
+                                        <p><b>Order:</b> N/A</p>
+                                        <p><b>Customer:</b> N/A</p>
+                                        <p><b>Order Date:</b> N/A</p>
+                                        <p><b>Cut-Off Date:</b> N/A</p>
+                                    </template>
+                                    <p><b>Quantity:</b> {job.Job_Quantity_oz__c} oz</p>
+                                    <p><b>Status:</b> {job.Status__c}</p>
+                                    <p><b>Order Late/Early:</b> <span class={job.diffClass}>{job.Diff_between_Out_Date_And_Cut_off_Date__c}</span></p>
+                                    <p><b>Date In:</b> {job.Date_In__c}</p>
+                                    <p><b>Date Out:</b> {job.Date_Out__c}</p>
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <!-- Scheduled Jobs -->
+                        <div class="job-section">
+                            <h3>Scheduled</h3>
+                            <template for:each={machine.scheduledJobs} for:item="job">
+                                <div key={job.Id} class="job-item scheduled-job" draggable="true" 
+                                     data-job-id={job.Id} ondragstart={handleDragStart} ondragend={handleDragEnd}
+                                     ondragover={handleJobDragOver} ondragleave={handleJobDragLeave}>
+                                    <template if:true={job.Order__r}>
+                                        <p><b>Order:</b> {job.Order__r.OrderNumber}</p>
+                                        <p><b>Customer:</b> {job.Order__r.Order_Nickname__c}</p>
+                                        <p><b>Order Date:</b> {job.Order__r.EffectiveDate}</p>
+                                        <p><b>Cut-Off Date:</b> {job.Order__r.Cut_Off_Date__c}</p>
+                                    </template>
+                                    <template if:false={job.Order__r}>
+                                        <p><b>Order:</b> N/A</p>
+                                        <p><b>Customer:</b> N/A</p>
+                                        <p><b>Order Date:</b> N/A</p>
+                                        <p><b>Cut-Off Date:</b> N/A</p>
+                                    </template>
+                                    <p><b>Quantity:</b> {job.Job_Quantity_oz__c} oz</p>
+                                    <p><b>Status:</b> {job.Status__c}</p>
+                                    <p><b>Order Late/Early:</b> <span class={job.diffClass}>{job.Diff_between_Out_Date_And_Cut_off_Date__c}</span></p>
+                                    <p><b>Date In:</b> {job.Date_In__c}</p>
+                                    <p><b>Date Out:</b> {job.Date_Out__c}</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>
