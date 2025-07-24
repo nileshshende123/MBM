@@ -60,9 +60,8 @@ public class MachineOrderDashboardControllerTest {
             Order__c = ord.Id,
             Machine__c = machines[0].Id,
             Job_Quantity_oz__c = 30,
-            Status__c = 'Scheduled'
-             
-        
+            Status__c = 'Scheduled',
+            MBM_Order__c = ord.Id
         );
         insert job;
     }
